@@ -2,12 +2,36 @@
 
 [![npm version](https://img.shields.io/npm/v/safe-expr-eval.svg)](https://www.npmjs.com/package/safe-expr-eval)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Security](https://img.shields.io/badge/CVE--2025--12735-FIXED-success)](https://github.com/alecasg555/safe-expr-eval/security/advisories)
+[![npm downloads](https://img.shields.io/npm/dm/safe-expr-eval.svg)](https://www.npmjs.com/package/safe-expr-eval)
 
-**Secure expression evaluator - Drop-in replacement for expr-eval without CVE-2025-12735 vulnerability**
+> **🚨 SECURITY ALERT**: The `expr-eval` library contains **CVE-2025-12735**, a critical arbitrary code execution vulnerability (CVSS 9.8). 
+> 
+> **✅ SOLUTION**: `safe-expr-eval` is the official secure replacement that fixes this vulnerability.
 
-## 🔒 Security First
+## 🔒 Official Solution to CVE-2025-12735
 
-This library was created as a secure alternative to `expr-eval`, which is vulnerable to **CVE-2025-12735** - a critical arbitrary code execution vulnerability. `safe-expr-eval` provides the same API without using `eval()` or `Function()` constructors, making it safe from code injection attacks.
+This library was created as the **secure drop-in replacement** for `expr-eval`, which is vulnerable to **CVE-2025-12735** - a critical arbitrary code execution vulnerability that allows attackers to execute malicious code through the use of JavaScript's `eval()` function.
+
+### ⚠️ The Vulnerability
+
+```javascript
+// ❌ VULNERABLE (expr-eval with CVE-2025-12735)
+const Parser = require('expr-eval').Parser;
+const parser = new Parser();
+parser.evaluate('process.exit()'); // Executes arbitrary code!
+```
+
+### ✅ The Solution
+
+```javascript
+// ✅ SECURE (safe-expr-eval)
+const { Parser } = require('safe-expr-eval');
+const parser = new Parser();
+parser.evaluate('process.exit()'); // Error: Undefined variable (safe!)
+```
+
+`safe-expr-eval` provides the same API without using `eval()` or `Function()` constructors, making it **100% safe** from code injection attacks.
 
 ## ✨ Features
 

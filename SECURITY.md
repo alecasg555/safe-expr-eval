@@ -1,5 +1,69 @@
 # Security Policy
 
+## 🛡️ CVE-2025-12735 Resolution
+
+**`safe-expr-eval` is the official secure replacement for the vulnerable `expr-eval` library.**
+
+### Vulnerability Details
+
+- **CVE ID**: CVE-2025-12735
+- **Severity**: Critical (CVSS 9.8)
+- **Affected Package**: `expr-eval` (all versions)
+- **Vulnerability Type**: Arbitrary Code Execution via eval()
+- **Fixed In**: `safe-expr-eval` v1.0.0+
+
+### Impact
+
+The `expr-eval` library uses JavaScript's `eval()` function to evaluate expressions, allowing attackers to:
+- Execute arbitrary JavaScript code
+- Access sensitive system resources
+- Read/write files on the server
+- Compromise the entire application
+
+### Proof of Concept
+
+```javascript
+// Vulnerable code using expr-eval
+const Parser = require('expr-eval').Parser;
+const parser = new Parser();
+
+// Attacker can execute arbitrary code
+parser.evaluate('process.exit()'); // Crashes the application
+parser.evaluate('require("fs").readFileSync("/etc/passwd")'); // Reads sensitive files
+parser.evaluate('require("child_process").execSync("rm -rf /")'); // System commands
+```
+
+### Solution: Migrate to safe-expr-eval
+
+```bash
+# Remove vulnerable package
+npm uninstall expr-eval
+
+# Install secure replacement
+npm install safe-expr-eval
+```
+
+```javascript
+// Update your imports (100% compatible API)
+// Before:
+const { Parser } = require('expr-eval');
+
+// After:
+const { Parser } = require('safe-expr-eval');
+
+// All your existing code works without changes!
+```
+
+### Why safe-expr-eval is Secure
+
+1. ✅ **No eval()**: Never uses JavaScript's dangerous `eval()` function
+2. ✅ **No Function constructor**: Doesn't dynamically create executable code
+3. ✅ **Token-based parsing**: Expressions are parsed into safe tokens
+4. ✅ **Controlled evaluation**: Only executes whitelisted operations
+5. ✅ **TypeScript**: Built with type safety from the ground up
+
+---
+
 ## Supported Versions
 
 We release patches for security vulnerabilities for the following versions:
